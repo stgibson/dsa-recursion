@@ -44,8 +44,23 @@ Split squares must contain exactly four parts::
 def validate(s):
     """Validate that a given square is valid.."""
 
+    square_size = 4
+
+    # base case: s is simple
+    if type(s) == int:
+        if s == 0 or s == 1:
+            return True
+        return False
+
+    # normal case: true only if contains four valid squares
+    if len(s) == square_size:
+        for square in s:
+            if not validate(square):
+                return False
+        return True
+    return False
 
 if __name__ == "__main__":
     import doctest
     if doctest.testmod().failed == 0:
-        print "\n*** ALL TESTS PASS; THAT'S SUPER-VALID WORK!\n"
+        print("\n*** ALL TESTS PASS; THAT'S SUPER-VALID WORK!\n")
