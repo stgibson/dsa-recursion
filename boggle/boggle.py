@@ -107,11 +107,40 @@ def make_board(board_string):
 
     return board
 
+def findRecursive(board, word, y, x):
+    """Can word be found in board starting at cell y-x?"""
 
+    # base case: word is empty string
+    if not word:
+        return True
+
+    # normal case: try each cardinal direction
+    if y > 0 and board[y - 1][x] == word[0]:
+        if findRecursive(board, word[1:], y - 1, x):
+            return True
+
+    if y < len(board) - 1 and board[y + 1][x] == word[0]:
+        if findRecursive(board, word[1:], y + 1, x):
+            return True
+
+    if x > 0 and board[y][x - 1] == word[0]:
+        if findRecursive(board, word[1:], y, x - 1):
+            return True
+    
+    if x < len(board[y]) - 1 and board[y][x + 1] == word[0]:
+        if findRecursive(board, word[1:], y, x + 1):
+            return True
+
+    return False
 
 def find(board, word):
     """Can word be found in board?"""
 
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j] == word[0] and findRecursive(board, word[1:], i, j):
+                return True
+    return False
 
 if __name__ == '__main__':
     import doctest
