@@ -107,28 +107,33 @@ def make_board(board_string):
 
     return board
 
-def findRecursive(board, word, y, x):
+def findRecursive(board, word, y, x, visited):
     """Can word be found in board starting at cell y-x?"""
 
     # base case: word is empty string
     if not word:
         return True
 
+    visited_copy = visited.copy()
+    visited_copy[y][x] = True
+
     # normal case: try each cardinal direction
-    if y > 0 and board[y - 1][x] == word[0]:
-        if findRecursive(board, word[1:], y - 1, x):
+    if y > 0 and board[y - 1][x] == word[0] and not visited[y - 1][x]:
+        if findRecursive(board, word[1:], y - 1, x, visited_copy):
             return True
 
-    if y < len(board) - 1 and board[y + 1][x] == word[0]:
-        if findRecursive(board, word[1:], y + 1, x):
+    if y < len(board) - 1 and board[y + 1][x] == word[0] and \
+        not visited[y + 1][x]:
+        if findRecursive(board, word[1:], y + 1, x, visited_copy):
             return True
 
-    if x > 0 and board[y][x - 1] == word[0]:
-        if findRecursive(board, word[1:], y, x - 1):
+    if x > 0 and board[y][x - 1] == word[0] and not visited[y][x - 1]:
+        if findRecursive(board, word[1:], y, x - 1, visited_copy):
             return True
     
-    if x < len(board[y]) - 1 and board[y][x + 1] == word[0]:
-        if findRecursive(board, word[1:], y, x + 1):
+    if x < len(board[y]) - 1 and board[y][x + 1] == word[0] and \
+        not visited[y][x + 1]:
+        if findRecursive(board, word[1:], y, x + 1, visited_copy):
             return True
 
     return False
@@ -136,10 +141,19 @@ def findRecursive(board, word, y, x):
 def find(board, word):
     """Can word be found in board?"""
 
+    # create matrix to track visited letters
+    visited = []
+    for i in range(len(board)):
+        new_row = []
+        for j in range(len(board[i])):
+            new_row.append(False)
+        visited.append(new_row)
+
     for i in range(len(board)):
         for j in range(len(board[i])):
-            if board[i][j] == word[0] and findRecursive(board, word[1:], i, j):
-                return True
+            if board[i][j] == word[0]:
+                if findRecursive(board, word[1:], i, j, visited):
+                    return True
     return False
 
 if __name__ == '__main__':
