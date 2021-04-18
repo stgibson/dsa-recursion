@@ -6,7 +6,8 @@ const {
   findIndex,
   revString,
   gatherStrings,
-  binarySearch
+  binarySearch,
+  balancedBrackets
 } = require("./recursion");
 
 describe("product", function() {
@@ -120,5 +121,23 @@ describe("binarySearch", function () {
   it("should return -1 if the value is not found", function() {
     expect(binarySearch([1, 2, 3, 4], 0)).toEqual(-1);
     expect(binarySearch([1, 2], 11)).toEqual(-1);
+  });
+});
+
+describe("balancedBrackets", function() {
+  it("returns true with no brackets", function() {
+    expect(balancedBrackets("hello")).toBeTruthy();
+  });
+
+  it("returns true with balanced brackets", function() {
+    expect(balancedBrackets("(hi) [there]")).toBeTruthy();
+    expect(balancedBrackets("(hi [there])")).toBeTruthy();
+    expect(balancedBrackets("(((hi)))")).toBeTruthy();
+  });
+
+  it("returns false with unbalanced brackets", function() {
+    expect(balancedBrackets("(hello")).toBeFalsy();
+    expect(balancedBrackets("(nope]")).toBeFalsy();
+    expect(balancedBrackets("((ok) [nope)]")).toBeFalsy();
   });
 });
